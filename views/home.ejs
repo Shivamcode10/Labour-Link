@@ -333,7 +333,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <% if (user) { %>
-                                        <a href="/labour/<%= labour._id %>" class="btn btn-primary w-100">
+                                        <a href="/professional/<%= labour._id %>" class="btn btn-primary w-100">
                                             View Profile
                                         </a>
                                     <% } else { %>
@@ -589,7 +589,7 @@
                                         <span class="ms-1">${(labour.rating || 0).toFixed(1)}</span>
                                     </div>
                                     <p class="mb-1"><strong>$${labour.wagePerHour || '0'}/hour</strong></p>
-                                    <a href="/labour/${labour._id}" class="btn btn-sm btn-primary w-100">View Profile</a>
+                                    <a href="/professional/${labour._id}" class="btn btn-sm btn-primary w-100">View Profile</a>
                                 </div>
                             `;
                             

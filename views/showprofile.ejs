@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= professional.name %> - <%= professional.profession %> | LabourLink</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/showprofile.css">
+</head>
+<body class="profile-body">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light profile-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hands-helping me-2"></i>
+                <span>LabourLink</span>
+            </a>
+            <div class="navbar-nav">
+                <a href="/" class="nav-link"><i class="fas fa-home me-1"></i> Home</a>
+                <a href="/find-labour" class="nav-link"><i class="fas fa-search me-1"></i> Find Professionals</a>
+                <% if (user) { %>
+                    <a href="/profile/<%= user.userType %>" class="nav-link"><i class="fas fa-user me-1"></i> My Profile</a>
+                <% } else { %>
+                    <a href="/login" class="nav-link"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Professional Header Section -->
+    <div class="profile-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="professional-info">
+                        <div class="profile-image">
+                            <% if (professional.profileImage) { %>
+                                <img src="<%= professional.profileImage %>" alt="<%= professional.name %>" class="img-fluid">
+                            <% } else { %>
+                                <div class="profile-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            <% } %>
+                            <% if (professional.isActive) { %>
+                                <span class="online-indicator" title="Available for work"></span>
+                            <% } %>
+                        </div>
+                        <div class="professional-details">
+                            <h1 class="professional-name"><%= professional.name %></h1>
+                            <p class="professional-title"><%= professional.profession %></p>
+                            <div class="rating-section">
+                                <div class="stars">
+                                    <% for(let i = 1; i <= 5; i++) { %>
+                                        <i class="fas fa-star <%= i <= averageRating ? 'active' : '' %>"></i>
+                                    <% } %>
+                                </div>
+                                <span class="rating-text">
+                                    <strong><%= averageRating %></strong> (<%= totalReviews %> reviews)
+                                </span>
+                            </div>
+                            <div class="professional-meta">
+                                <span class="meta-item">
+                                    <i class="fas fa-briefcase"></i>
+                                    <%= professional.experience %> experience
+                                </span>
+                                <span class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <%= professional.address.city %>, <%= professional.address.state %>
+                                </span>
+                                <% if (professional.location && professional.location.coordinates) { %>
+                                <span class="meta-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    Location verified
+                                </span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-card">
+                        <div class="price-item">
+                            <span class="price-label">Hourly Rate</span>
+                            <span class="price-value">₹<%= professional.wagePerHour %></span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Daily Rate</span>
+                            <span class="price-value">₹<%= professional.wagePerDay %></span>
+                        </div>
+                        <button class="btn btn-primary btn-contact w-100" data-bs-toggle="modal" data-bs-target="#contactModal">
+                            <i class="fas fa-envelope me-2"></i>Contact Professional
+                        </button>
+                        <% if (user && user.userType === 'customer') { %>
+                        <button class="btn btn-outline-primary btn-hire w-100 mt-2" data-bs-toggle="modal" data-bs-target="#hireModal">
+                            <i class="fas fa-calendar-check me-2"></i>Hire Now
+                        </button>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <!-- About Section -->
+                <section class="profile-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user me-2"></i>About
+                    </h3>
+                    <div class="about-content">
+                        <p><%= professional.bio || 'No bio provided yet.' %></p>
+                        
+                        <div class="skills-section">
+                            <h5>Skills & Expertise</h5>
+                            <div class="skills-list">
+                                <span class="skill-tag"><%= professional.profession %></span>
+                                <% if (professional.skills && professional.skills.length > 0) { %>
+                                    <% professional.skills.forEach(skill => { %>
+                                        <span class="skill-tag"><%= skill %></span>
+                                    <% }) %>
+                                <% } else { %>
+                                    <span class="skill-tag">Expert in <%= professional.profession %></span>
+                                    <span class="skill-tag">Quality Work</span>
+                                    <span class="skill-tag">Professional Service</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Portfolio Section -->
+                <section class="profile-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-briefcase me-2"></i>Portfolio (<%= works.length %>)
+                    </h3>
+                    <% if (works.length > 0) { %>
+                    <div class="portfolio-grid">
+                        <% works.forEach(work => { %>
+                        <div class="portfolio-item">
+                            <div class="portfolio-content">
+                                <h5 class="portfolio-title"><%= work.title %></h5>
+                                <p class="portfolio-description"><%= work.description %></p>
+                                <div class="portfolio-meta">
+                                    <span class="client">Client: <%= work.clientName %></span>
+                                    <span class="date"><%= work.completedDate.toLocaleDateString() %></span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                    <% } else { %>
+                    <div class="empty-state">
+                        <i class="fas fa-briefcase"></i>
+                        <p>No portfolio items yet</p>
+                    </div>
+                    <% } %>
+                </section>
+
+                <!-- Reviews Section -->
+                <section class="profile-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-star me-2"></i>Customer Reviews (<%= totalReviews %>)
+                    </h3>
+                    
+                    <!-- Overall Rating Summary -->
+                    <div class="rating-summary">
+                        <div class="overall-rating">
+                            <div class="rating-number"><%= averageRating %></div>
+                            <div class="stars">
+                                <% for(let i = 1; i <= 5; i++) { %>
+                                    <i class="fas fa-star <%= i <= averageRating ? 'active' : '' %>"></i>
+                                <% } %>
+                            </div>
+                            <div class="rating-count"><%= totalReviews %> reviews</div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews List -->
+                    <div class="reviews-list">
+                        <% if (reviews.length > 0) { %>
+                            <% reviews.forEach(review => { %>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <% if (review.customerId.profileImage) { %>
+                                            <img src="<%= review.customerId.profileImage %>" alt="<%= review.customerId.name %>" class="reviewer-avatar">
+                                        <% } else { %>
+                                            <div class="reviewer-avatar placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        <% } %>
+                                        <div class="reviewer-details">
+                                            <h6 class="reviewer-name"><%= review.customerId.name %></h6>
+                                            <div class="review-rating">
+                                                <% for(let i = 1; i <= 5; i++) { %>
+                                                    <i class="fas fa-star <%= i <= review.customerRating ? 'active' : '' %>"></i>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="review-date"><%= review.reviewDate ? review.reviewDate.toLocaleDateString() : review.completedDate.toLocaleDateString() %></span>
+                                </div>
+                                <p class="review-comment"><%= review.customerReview %></p>
+                            </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="empty-state">
+                                <i class="fas fa-star"></i>
+                                <p>No reviews yet</p>
+                                <small>Be the first to review this professional</small>
+                            </div>
+                        <% } %>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Contact Info -->
+                <div class="info-card">
+                    <h5 class="card-title">
+                        <i class="fas fa-info-circle me-2"></i>Contact Information
+                    </h5>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span><%= professional.phone %></span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span><%= professional.email %></span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>
+                                <%= professional.address.street %><br>
+                                <%= professional.address.city %>, <%= professional.address.state %><br>
+                                <%= professional.address.zipCode %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Details -->
+                <div class="info-card">
+                    <h5 class="card-title">
+                        <i class="fas fa-cog me-2"></i>Service Details
+                    </h5>
+                    <div class="service-details">
+                        <div class="service-item">
+                            <strong>Profession:</strong>
+                            <span><%= professional.profession %></span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Experience:</strong>
+                            <span><%= professional.experience %></span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Hourly Rate:</strong>
+                            <span>₹<%= professional.wagePerHour %></span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Daily Rate:</strong>
+                            <span>₹<%= professional.wagePerDay %></span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Availability:</strong>
+                            <span class="availability available">Available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Similar Professionals -->
+                <% if (similarProfessionals.length > 0) { %>
+                <div class="info-card">
+                    <h5 class="card-title">
+                        <i class="fas fa-users me-2"></i>Similar Professionals
+                    </h5>
+                    <div class="similar-professionals">
+                        <% similarProfessionals.forEach(pro => { %>
+                        <a href="/professional/<%= pro._id %>" class="similar-pro">
+                            <div class="pro-avatar">
+                                <% if (pro.profileImage) { %>
+                                    <img src="<%= pro.profileImage %>" alt="<%= pro.name %>">
+                                <% } else { %>
+                                    <div class="avatar-placeholder">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="pro-info">
+                                <h6><%= pro.name %></h6>
+                                <p><%= pro.profession %></p>
+                                <div class="pro-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span><%= pro.rating || '0.0' %></span>
+                                </div>
+                            </div>
+                        </a>
+                        <% }) %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Contact <%= professional.name %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contactForm">
+                        <input type="hidden" name="professionalId" value="<%= professional._id %>">
+                        <div class="mb-3">
+                            <label class="form-label">Service Type</label>
+                            <input type="text" class="form-control" name="serviceType" placeholder="e.g., Plumbing repair, Electrical work" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Budget (₹)</label>
+                                <input type="number" class="form-control" name="budget" placeholder="Your budget">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Timeline</label>
+                                <select class="form-select" name="timeline">
+                                    <option value="Flexible">Flexible</option>
+                                    <option value="Urgent">Urgent</option>
+                                    <option value="Within week">Within week</option>
+                                    <option value="Within month">Within month</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="message" rows="4" placeholder="Describe your project requirements..." required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="sendMessageBtn">Send Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hire Modal -->
+    <div class="modal fade" id="hireModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Hire <%= professional.name %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="hire-options">
+                        <div class="hire-option">
+                            <h6>Hourly Rate</h6>
+                            <div class="price">₹<%= professional.wagePerHour %>/hour</div>
+                            <button class="btn btn-outline-primary w-100 mt-2" onclick="selectHireOption('hourly')">Select Hourly</button>
+                        </div>
+                        <div class="hire-option">
+                            <h6>Daily Rate</h6>
+                            <div class="price">₹<%= professional.wagePerDay %>/day</div>
+                            <button class="btn btn-outline-primary w-100 mt-2" onclick="selectHireOption('daily')">Select Daily</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Contact Form Handling
+        document.getElementById('sendMessageBtn').addEventListener('click', async function() {
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch('/contact-professional', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('Message sent successfully! The professional will contact you soon.', 'success');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
+                    modal.hide();
+                    form.reset();
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showNotification('Error sending message. Please try again.', 'error');
+            }
+        });
+
+        function selectHireOption(type) {
+            const rate = type === 'hourly' ? <%= professional.wagePerHour %> : <%= professional.wagePerDay %>;
+            const rateType = type === 'hourly' ? 'per hour' : 'per day';
+            
+            showNotification(`You selected ${type} hiring at ₹${rate} ${rateType}. Please contact the professional to finalize details.`, 'success');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('hireModal'));
+            modal.hide();
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+            `;
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

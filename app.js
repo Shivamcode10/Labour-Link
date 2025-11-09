@@ -319,6 +319,150 @@ app.get('/logout', (req, res) => {
 
 // ==================== PROFILE ROUTES ====================
 
+// ==================== PROFILE VIEWING ROUTES ====================
+
+// Professional Public Profile
+app.get('/professional/:id', async (req, res) => {
+    try {
+        const professional = await User.findById(req.params.id);
+        
+        if (!professional || professional.userType !== 'labour') {
+            return res.status(404).render('404', { 
+                user: req.session.userId ? await User.findById(req.session.userId) : null 
+            });
+        }
+
+        // Get professional's works
+        const works = await Work.find({ labourId: req.params.id })
+            .sort({ completedDate: -1 })
+            .limit(10);
+
+        // Get professional's reviews
+        const reviews = await Order.find({ 
+            labourId: req.params.id, 
+            customerRating: { $exists: true, $ne: null } 
+        })
+        .populate('customerId', 'name profileImage')
+        .sort({ completedDate: -1 })
+        .limit(20);
+
+        // Calculate average rating
+        const averageRating = reviews.length > 0 
+            ? (reviews.reduce((sum, review) => sum + review.customerRating, 0) / reviews.length).toFixed(1)
+            : 0;
+
+        // Get similar professionals (same profession)
+        const similarProfessionals = await User.find({
+            _id: { $ne: req.params.id },
+            userType: 'labour',
+            profession: professional.profession,
+            isActive: true
+        })
+        .select('name profession rating profileImage experience wagePerHour')
+        .limit(4)
+        .sort({ rating: -1 });
+
+        res.render('showprofile', {
+            professional,
+            works,
+            reviews,
+            averageRating,
+            totalReviews: reviews.length,
+            similarProfessionals,
+            user: req.session.userId ? await User.findById(req.session.userId) : null,
+            isOwner: req.session.userId === req.params.id
+        });
+    } catch (error) {
+        console.error('Error loading professional profile:', error);
+        res.status(500).render('error', { 
+            error: 'Error loading professional profile',
+            user: req.session.userId ? await User.findById(req.session.userId) : null
+        });
+    }
+});
+
+// Contact Professional (Send Message/Request)
+app.post('/contact-professional', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'Please login to contact professionals' });
+    }
+
+    try {
+        const { professionalId, message, serviceType, budget, timeline } = req.body;
+        
+        const customer = await User.findById(req.session.userId);
+        const professional = await User.findById(professionalId);
+
+        if (!professional || professional.userType !== 'labour') {
+            return res.status(404).json({ success: false, message: 'Professional not found' });
+        }
+
+        // Create a new order/request
+        const order = new Order({
+            customerId: req.session.userId,
+            labourId: professionalId,
+            serviceType: serviceType || 'General Service',
+            description: message,
+            budget: budget ? parseFloat(budget) : null,
+            timeline: timeline || 'Flexible',
+            status: 'pending'
+        });
+
+        await order.save();
+
+        res.json({ 
+            success: true, 
+            message: 'Your request has been sent successfully!',
+            orderId: order._id
+        });
+    } catch (error) {
+        console.error('Error contacting professional:', error);
+        res.status(500).json({ success: false, message: 'Error sending request' });
+    }
+});
+
+// Leave Review for Professional
+app.post('/leave-review', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'Please login to leave a review' });
+    }
+
+    try {
+        const { professionalId, rating, comment, orderId } = req.body;
+        
+        // Update the order with review
+        await Order.findByIdAndUpdate(orderId, {
+            customerRating: parseInt(rating),
+            customerReview: comment,
+            reviewDate: new Date()
+        });
+
+        // Update professional's average rating
+        const professionalReviews = await Order.find({ 
+            labourId: professionalId, 
+            customerRating: { $exists: true } 
+        });
+        
+        const averageRating = professionalReviews.reduce((sum, review) => sum + review.customerRating, 0) / professionalReviews.length;
+        const totalReviews = professionalReviews.length;
+
+        await User.findByIdAndUpdate(professionalId, {
+            rating: parseFloat(averageRating.toFixed(1)),
+            totalReviews: totalReviews
+        });
+
+        res.json({ 
+            success: true, 
+            message: 'Review submitted successfully!',
+            averageRating: averageRating.toFixed(1),
+            totalReviews: totalReviews
+        });
+    } catch (error) {
+        console.error('Error leaving review:', error);
+        res.status(500).json({ success: false, message: 'Error submitting review' });
+    }
+});
+
 // Customer Profile
 app.get('/profile/customer', async (req, res) => {
     if (!req.session.userId) {
