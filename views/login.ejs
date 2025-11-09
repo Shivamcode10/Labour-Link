@@ -69,9 +69,13 @@
                                 <div class="step-circle">3</div>
                                 <span>Location</span>
                             </div>
+                            <div class="step" data-step="4">
+                                <div class="step-circle">4</div>
+                                <span>Complete</span>
+                            </div>
                         </div>
 
-                        <!-- Step 1: User Type Selection -->
+                        <!-- Step 1: Account Type Selection -->
                         <div class="form-step active" id="step1">
                             <div class="step-content">
                                 <h3>Choose Your Path</h3>
@@ -119,71 +123,12 @@
                             </div>
                         </div>
 
-                        <!-- Step 2: Details -->
+                        <!-- Step 2: Login & Registration -->
                         <div class="form-step" id="step2">
                             <div class="step-content">
-                                <h3>Complete Your Profile</h3>
-                                <p class="step-description">Fill in your details to get started</p>
+                                <h3>Account Setup</h3>
+                                <p class="step-description" id="step2Description">Sign in or create your account</p>
 
-                                <!-- Hidden fields to store collected data -->
-                                <input type="hidden" id="selectedUserType" name="userType">
-
-                                <!-- Labour Specific Fields -->
-                                <div class="labour-fields" id="labourFields" style="display: none;">
-                                    <div class="section-title">
-                                        <i class="fas fa-user-tie me-2"></i>Professional Information
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select class="form-select" id="profession" name="profession">
-                                                    <option value="">Select your profession</option>
-                                                    <option value="plumber">Plumber</option>
-                                                    <option value="electrician">Electrician</option>
-                                                    <option value="carpenter">Carpenter</option>
-                                                    <option value="painter">Painter</option>
-                                                    <option value="mason">Mason</option>
-                                                    <option value="ac-technician">AC Technician</option>
-                                                    <option value="gardener">Gardener</option>
-                                                    <option value="cleaner">Cleaner</option>
-                                                    <option value="other">Other</option>
-                                                </select>
-                                                <label for="profession"><i class="fas fa-briefcase me-2"></i>Profession</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select class="form-select" id="experience" name="experience">
-                                                    <option value="">Select experience</option>
-                                                    <option value="0-1 years">0-1 years</option>
-                                                    <option value="1-3 years">1-3 years</option>
-                                                    <option value="3-5 years">3-5 years</option>
-                                                    <option value="5-10 years">5-10 years</option>
-                                                    <option value="10+ years">10+ years</option>
-                                                </select>
-                                                <label for="experience"><i class="fas fa-chart-line me-2"></i>Experience</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" class="form-control" id="wagePerHour" name="wagePerHour" 
-                                                       placeholder="0.00" step="0.01" min="0">
-                                                <label for="wagePerHour"><i class="fas fa-clock me-2"></i>Wage per Hour ($)</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" class="form-control" id="wagePerDay" name="wagePerDay" 
-                                                       placeholder="0.00" step="0.01" min="0">
-                                                <label for="wagePerDay"><i class="fas fa-calendar-day me-2"></i>Wage per Day ($)</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Login/Register Forms -->
                                 <div class="forms-container">
                                     <div class="row">
                                         <!-- Login Form -->
@@ -212,7 +157,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Register Form -->
+                                        <!-- Registration Form -->
                                         <div class="col-lg-6">
                                             <div class="form-card">
                                                 <div class="form-header">
@@ -233,19 +178,71 @@
                                                     </div>
                                                     <div class="form-floating mb-3">
                                                         <input type="password" class="form-control" id="registerPassword" name="password"
-                                                               placeholder="Password" required>
-                                                        <label for="registerPassword"><i class="fas fa-lock me-2"></i>Password</label>
+                                                               placeholder="Password" required minlength="6">
+                                                        <label for="registerPassword"><i class="fas fa-lock me-2"></i>Password (min. 6 characters)</label>
                                                     </div>
                                                     <div class="form-floating mb-3">
                                                         <input type="tel" class="form-control" id="registerPhone" name="phone"
-                                                               placeholder="Phone Number" required>
-                                                        <label for="registerPhone"><i class="fas fa-phone me-2"></i>Phone Number</label>
+                                                               placeholder="Phone Number" required pattern="[0-9]{10}">
+                                                        <label for="registerPhone"><i class="fas fa-phone me-2"></i>Phone Number (10 digits)</label>
                                                     </div>
                                                     <div class="form-floating mb-3">
                                                         <input type="number" class="form-control" id="registerAge" name="age"
                                                                placeholder="Age" min="18" max="100" required>
-                                                        <label for="registerAge"><i class="fas fa-birthday-cake me-2"></i>Age</label>
+                                                        <label for="registerAge"><i class="fas fa-birthday-cake me-2"></i>Age (18+)</label>
                                                     </div>
+
+                                                    <!-- Professional Fields (Hidden by default) -->
+                                                    <div id="professionalFields" style="display: none;">
+                                                        <div class="section-title mb-3">
+                                                            <i class="fas fa-user-tie me-2"></i>Professional Information
+                                                        </div>
+                                                        <div class="form-floating mb-3">
+                                                            <select class="form-select" id="profession" name="profession">
+                                                                <option value="">Select your profession</option>
+                                                                <option value="Plumber">Plumber</option>
+                                                                <option value="Electrician">Electrician</option>
+                                                                <option value="Carpenter">Carpenter</option>
+                                                                <option value="Painter">Painter</option>
+                                                                <option value="Mason">Mason</option>
+                                                                <option value="AC Repair">AC Technician</option>
+                                                                <option value="Cleaner">Cleaner</option>
+                                                                <option value="Gardener">Gardener</option>
+                                                                <option value="Welder">Welder</option>
+                                                                <option value="Mechanic">Mechanic</option>
+                                                                <option value="Technician">Technician</option>
+                                                            </select>
+                                                            <label for="profession"><i class="fas fa-briefcase me-2"></i>Profession</label>
+                                                        </div>
+                                                        <div class="form-floating mb-3">
+                                                            <select class="form-select" id="experience" name="experience">
+                                                                <option value="">Select experience</option>
+                                                                <option value="0-1 years">0-1 years</option>
+                                                                <option value="1-3 years">1-3 years</option>
+                                                                <option value="3-5 years">3-5 years</option>
+                                                                <option value="5-10 years">5-10 years</option>
+                                                                <option value="10+ years">10+ years</option>
+                                                            </select>
+                                                            <label for="experience"><i class="fas fa-chart-line me-2"></i>Experience</label>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-floating mb-3">
+                                                                    <input type="number" class="form-control" id="wagePerHour" name="wagePerHour" 
+                                                                           placeholder="0.00" step="0.01" min="0">
+                                                                    <label for="wagePerHour"><i class="fas fa-clock me-2"></i>Wage per Hour (₹)</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-floating mb-3">
+                                                                    <input type="number" class="form-control" id="wagePerDay" name="wagePerDay" 
+                                                                           placeholder="0.00" step="0.01" min="0">
+                                                                    <label for="wagePerDay"><i class="fas fa-calendar-day me-2"></i>Wage per Day (₹)</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <button type="submit" class="btn btn-success w-100 register-btn">
                                                         Continue to Location <i class="fas fa-arrow-right ms-2"></i>
                                                     </button>
@@ -269,12 +266,6 @@
                                 <h3>Set Your Location</h3>
                                 <p class="step-description">Help us connect you with relevant opportunities in your area</p>
 
-                                <!-- Hidden fields to store location data -->
-                                <input type="hidden" id="selectedCity" name="city">
-                                <input type="hidden" id="selectedState" name="state">
-                                <input type="hidden" id="selectedLat" name="lat">
-                                <input type="hidden" id="selectedLng" name="lng">
-
                                 <div class="location-section">
                                     <div class="location-controls">
                                         <div class="search-box">
@@ -297,7 +288,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="location-details">
+                                    <div class="location-details mt-3">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
@@ -315,36 +306,111 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Final Registration Form -->
-                                    <div class="final-registration mt-4">
-                                        <form id="finalRegisterForm" action="/register" method="POST" style="display: none;">
-                                            <!-- All collected data will be populated here -->
-                                            <input type="hidden" id="finalUserType" name="userType">
-                                            <input type="hidden" id="finalName" name="name">
-                                            <input type="hidden" id="finalEmail" name="email">
-                                            <input type="hidden" id="finalPassword" name="password">
-                                            <input type="hidden" id="finalPhone" name="phone">
-                                            <input type="hidden" id="finalAge" name="age">
-                                            <input type="hidden" id="finalProfession" name="profession">
-                                            <input type="hidden" id="finalExperience" name="experience">
-                                            <input type="hidden" id="finalWagePerHour" name="wagePerHour">
-                                            <input type="hidden" id="finalWagePerDay" name="wagePerDay">
-                                            <input type="hidden" id="finalCity" name="city">
-                                            <input type="hidden" id="finalState" name="state">
-                                            <input type="hidden" id="finalLat" name="lat">
-                                            <input type="hidden" id="finalLng" name="lng">
-                                        </form>
-                                        <button type="button" class="btn btn-success w-100 final-register-btn" disabled>
-                                            <i class="fas fa-rocket me-2"></i>Complete Registration
-                                        </button>
-                                    </div>
                                 </div>
 
-                                <div class="step-actions">
+                                <div class="step-actions mt-4">
                                     <button class="btn btn-outline-secondary btn-prev" data-prev="2">
                                         <i class="fas fa-arrow-left me-2"></i>Back
                                     </button>
+                                    <button class="btn btn-primary btn-next" data-next="4" disabled>
+                                        Review & Complete <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Review & Complete -->
+                        <div class="form-step" id="step4">
+                            <div class="step-content">
+                                <h3>Review Your Information</h3>
+                                <p class="step-description">Please review your details before completing registration</p>
+
+                                <div class="review-section">
+                                    <div class="review-card">
+                                        <h5><i class="fas fa-user me-2"></i>Personal Information</h5>
+                                        <div class="review-details">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <strong>Name:</strong> <span id="reviewName">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Email:</strong> <span id="reviewEmail">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Phone:</strong> <span id="reviewPhone">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Age:</strong> <span id="reviewAge">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Account Type:</strong> <span id="reviewUserType">-</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="review-card" id="professionalReview" style="display: none;">
+                                        <h5><i class="fas fa-briefcase me-2"></i>Professional Information</h5>
+                                        <div class="review-details">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <strong>Profession:</strong> <span id="reviewProfession">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Experience:</strong> <span id="reviewExperience">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Wage/Hour:</strong> ₹<span id="reviewWageHour">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>Wage/Day:</strong> ₹<span id="reviewWageDay">-</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="review-card">
+                                        <h5><i class="fas fa-map-marker-alt me-2"></i>Location Information</h5>
+                                        <div class="review-details">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <strong>City:</strong> <span id="reviewCity">-</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <strong>State:</strong> <span id="reviewState">-</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Final Registration Form -->
+                                <div class="final-registration mt-4">
+                                    <form id="finalRegisterForm" action="/register" method="POST">
+                                        <!-- All collected data will be populated here -->
+                                        <input type="hidden" id="finalUserType" name="userType">
+                                        <input type="hidden" id="finalName" name="name">
+                                        <input type="hidden" id="finalEmail" name="email">
+                                        <input type="hidden" id="finalPassword" name="password">
+                                        <input type="hidden" id="finalPhone" name="phone">
+                                        <input type="hidden" id="finalAge" name="age">
+                                        <input type="hidden" id="finalProfession" name="profession">
+                                        <input type="hidden" id="finalExperience" name="experience">
+                                        <input type="hidden" id="finalWagePerHour" name="wagePerHour">
+                                        <input type="hidden" id="finalWagePerDay" name="wagePerDay">
+                                        <input type="hidden" id="finalCity" name="city">
+                                        <input type="hidden" id="finalState" name="state">
+                                        <input type="hidden" id="finalLat" name="lat">
+                                        <input type="hidden" id="finalLng" name="lng">
+                                    </form>
+                                    <div class="step-actions">
+                                        <button class="btn btn-outline-secondary btn-prev" data-prev="3">
+                                            <i class="fas fa-arrow-left me-2"></i>Back
+                                        </button>
+                                        <button type="button" class="btn btn-success final-register-btn">
+                                            <i class="fas fa-rocket me-2"></i>Complete Registration
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -364,408 +430,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Login Page JavaScript
-        let addressMap;
-        let userMarker;
-        let selectedLocation = null;
-        let selectedUserType = null;
-        let collectedData = {};
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initAddressMap();
-            setupEventListeners();
-            initializeStepNavigation();
-            
-            // Pre-select user type if coming from home page
-            <% if (preSelectUserType) { %>
-                const userTypeCard = document.querySelector('.user-type-card[data-type="<%= preSelectUserType %>"]');
-                if (userTypeCard) {
-                    userTypeCard.click();
-                }
-            <% } %>
-        });
-
-        function initAddressMap() {
-            // Default center (India)
-            const defaultCenter = [20.5937, 78.9629];
-            
-            addressMap = L.map('addressMap').setView(defaultCenter, 5);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(addressMap);
-
-            // Add click event to map
-            addressMap.on('click', function(e) {
-                setSelectedLocation(e.latlng.lat, e.latlng.lng);
-                updateStep3Validation();
-            });
-        }
-
-        function setSelectedLocation(lat, lng) {
-            selectedLocation = { lat, lng };
-            
-            // Remove existing marker
-            if (userMarker) {
-                addressMap.removeLayer(userMarker);
-            }
-            
-            // Add new marker with custom icon
-            const customIcon = L.divIcon({
-                className: 'custom-marker',
-                html: '<i class="fas fa-map-marker-alt" style="color: #667eea; font-size: 30px;"></i>',
-                iconSize: [30, 30],
-                iconAnchor: [15, 30]
-            });
-            
-            userMarker = L.marker([lat, lng], { icon: customIcon })
-                .addTo(addressMap)
-                .bindPopup('Your Selected Location')
-                .openPopup();
-            
-            // Update hidden fields
-            document.getElementById('selectedLat').value = lat;
-            document.getElementById('selectedLng').value = lng;
-            
-            // Reverse geocode to get address
-            reverseGeocode(lat, lng);
-        }
-
-        function reverseGeocode(lat, lng) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.address) {
-                        const city = data.address.city || data.address.town || data.address.village || '';
-                        const state = data.address.state || '';
-                        
-                        document.getElementById('city').value = city;
-                        document.getElementById('state').value = state;
-                        document.getElementById('selectedCity').value = city;
-                        document.getElementById('selectedState').value = state;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error reverse geocoding:', error);
-                });
-        }
-
-        function setupEventListeners() {
-            // User type selection
-            document.querySelectorAll('.user-type-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    // Remove selection from all cards
-                    document.querySelectorAll('.user-type-card').forEach(c => {
-                        c.classList.remove('selected');
-                    });
-                    
-                    // Add selection to clicked card
-                    this.classList.add('selected');
-                    
-                    selectedUserType = this.dataset.type;
-                    document.getElementById('selectedUserType').value = selectedUserType;
-                    updateStep1Validation();
-                    
-                    // Show/hide labour fields in step 2
-                    const labourFields = document.getElementById('labourFields');
-                    if (selectedUserType === 'labour') {
-                        labourFields.style.display = 'block';
-                        document.getElementById('profession').required = true;
-                        document.getElementById('experience').required = true;
-                    } else {
-                        labourFields.style.display = 'none';
-                        document.getElementById('profession').required = false;
-                        document.getElementById('experience').required = false;
-                    }
-                });
-            });
-
-            // Location search
-            document.getElementById('locationSearch').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchLocation();
-                }
-            });
-
-            document.getElementById('useCurrentLocation').addEventListener('click', function() {
-                useCurrentLocation();
-            });
-
-            // Form submissions
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            document.getElementById('registerForm').addEventListener('submit', handleRegistrationStep2);
-            document.querySelector('.final-register-btn').addEventListener('click', handleFinalRegistration);
-        }
-
-        function initializeStepNavigation() {
-            // Next button handlers
-            document.querySelectorAll('.btn-next').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const nextStep = this.dataset.next;
-                    navigateToStep(nextStep);
-                });
-            });
-
-            // Previous button handlers
-            document.querySelectorAll('.btn-prev').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const prevStep = this.dataset.prev;
-                    navigateToStep(prevStep);
-                });
-            });
-        }
-
-        function navigateToStep(stepNumber) {
-            // Hide all steps
-            document.querySelectorAll('.form-step').forEach(step => {
-                step.classList.remove('active');
-            });
-            
-            // Show target step
-            document.getElementById(`step${stepNumber}`).classList.add('active');
-            
-            // Update progress steps
-            document.querySelectorAll('.step').forEach(step => {
-                step.classList.remove('active');
-                if (parseInt(step.dataset.step) <= parseInt(stepNumber)) {
-                    step.classList.add('active');
-                }
-            });
-        }
-
-        function searchLocation() {
-            const query = document.getElementById('locationSearch').value;
-            if (query) {
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.length > 0) {
-                            const result = data[0];
-                            const lat = parseFloat(result.lat);
-                            const lon = parseFloat(result.lon);
-                            
-                            addressMap.setView([lat, lon], 12);
-                            setSelectedLocation(lat, lon);
-                            updateStep3Validation();
-                        } else {
-                            showNotification('Location not found. Please try again.', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error searching location:', error);
-                        showNotification('Error searching location. Please try again.', 'error');
-                    });
-            }
-        }
-
-        function useCurrentLocation() {
-            if (navigator.geolocation) {
-                showNotification('Getting your current location...', 'info');
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        
-                        addressMap.setView([lat, lng], 12);
-                        setSelectedLocation(lat, lng);
-                        updateStep3Validation();
-                        showNotification('Location set successfully!', 'success');
-                    },
-                    (error) => {
-                        console.log('Geolocation error:', error);
-                        let message = 'Unable to get your current location. ';
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                message += 'Please enable location permissions in your browser.';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                message += 'Location information is unavailable.';
-                                break;
-                            case error.TIMEOUT:
-                                message += 'Location request timed out.';
-                                break;
-                            default:
-                                message += 'An unknown error occurred.';
-                        }
-                        showNotification(message, 'error');
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 60000
-                    }
-                );
-            } else {
-                showNotification('Geolocation is not supported by your browser.', 'error');
-            }
-        }
-
-        function updateStep1Validation() {
-            const nextButton = document.querySelector('#step1 .btn-next');
-            nextButton.disabled = !selectedUserType;
-        }
-
-        function updateStep3Validation() {
-            const registerButton = document.querySelector('.final-register-btn');
-            registerButton.disabled = !selectedLocation;
-        }
-
-        function handleLogin(e) {
-            // Let the form submit naturally
-            console.log('Login form submitted');
-        }
-
-        function handleRegistrationStep2(e) {
-            e.preventDefault();
-            
-            // Collect data from step 2
-            collectedData = {
-                userType: selectedUserType,
-                name: document.getElementById('registerName').value,
-                email: document.getElementById('registerEmail').value,
-                password: document.getElementById('registerPassword').value,
-                phone: document.getElementById('registerPhone').value,
-                age: document.getElementById('registerAge').value
-            };
-
-            // Add labour-specific data if applicable
-            if (selectedUserType === 'labour') {
-                collectedData.profession = document.getElementById('profession').value;
-                collectedData.experience = document.getElementById('experience').value;
-                collectedData.wagePerHour = document.getElementById('wagePerHour').value;
-                collectedData.wagePerDay = document.getElementById('wagePerDay').value;
-
-                // Validate labour fields
-                if (!collectedData.profession || !collectedData.experience) {
-                    showNotification('Please fill all professional information', 'error');
-                    return;
-                }
-            }
-
-            // Validate all fields
-            if (!collectedData.name || !collectedData.email || !collectedData.password || 
-                !collectedData.phone || !collectedData.age) {
-                showNotification('Please fill all required fields', 'error');
-                return;
-            }
-
-            // Move to step 3 (Location)
-            navigateToStep(3);
-        }
-
-        function handleFinalRegistration() {
-            if (!selectedLocation) {
-                showNotification('Please set your location on the map', 'error');
-                return;
-            }
-
-            // Add location data to collected data
-            collectedData.city = document.getElementById('selectedCity').value;
-            collectedData.state = document.getElementById('selectedState').value;
-            collectedData.lat = document.getElementById('selectedLat').value;
-            collectedData.lng = document.getElementById('selectedLng').value;
-
-            // Populate the final form
-            document.getElementById('finalUserType').value = collectedData.userType;
-            document.getElementById('finalName').value = collectedData.name;
-            document.getElementById('finalEmail').value = collectedData.email;
-            document.getElementById('finalPassword').value = collectedData.password;
-            document.getElementById('finalPhone').value = collectedData.phone;
-            document.getElementById('finalAge').value = collectedData.age;
-            document.getElementById('finalCity').value = collectedData.city;
-            document.getElementById('finalState').value = collectedData.state;
-            document.getElementById('finalLat').value = collectedData.lat;
-            document.getElementById('finalLng').value = collectedData.lng;
-
-            if (collectedData.userType === 'labour') {
-                document.getElementById('finalProfession').value = collectedData.profession || '';
-                document.getElementById('finalExperience').value = collectedData.experience || '';
-                document.getElementById('finalWagePerHour').value = collectedData.wagePerHour || '';
-                document.getElementById('finalWagePerDay').value = collectedData.wagePerDay || '';
-            }
-
-            // Show loading spinner
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            loadingSpinner.style.display = 'flex';
-
-            // Submit the final form
-            document.getElementById('finalRegisterForm').submit();
-        }
-
-        function showNotification(message, type) {
-            // Remove existing notifications
-            const existingNotifications = document.querySelectorAll('.custom-notification');
-            existingNotifications.forEach(notification => notification.remove());
-            
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.className = `custom-notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            // Add styles
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1'};
-                color: ${type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460'};
-                padding: 1rem 1.5rem;
-                border-radius: 10px;
-                border: 1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#bee5eb'};
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                z-index: 10000;
-                max-width: 400px;
-                animation: slideInRight 0.3s ease;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.animation = 'slideOutRight 0.3s ease';
-                    setTimeout(() => notification.remove(), 300);
-                }
-            }, 5000);
-        }
-
-        // Add CSS for notifications
-        const notificationStyles = document.createElement('style');
-        notificationStyles.textContent = `
-            @keyframes slideInRight {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            
-            @keyframes slideOutRight {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-            
-            .custom-marker {
-                background: none !important;
-                border: none !important;
-            }
-
-            .final-registration {
-                margin-top: 2rem;
-                padding-top: 2rem;
-                border-top: 2px solid #e9ecef;
-            }
-
-            .final-register-btn {
-                height: 50px;
-                font-size: 1.1rem;
-            }
-        `;
-        document.head.appendChild(notificationStyles);
-    </script>
+    <script src="/js/login.js"></script>
 </body>
 </html>
