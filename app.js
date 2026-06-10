@@ -1,3 +1,7 @@
+require("dotenv").config();
+
+
+const multer = require("multer");
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -7,7 +11,8 @@ const User = require('./models/User');
 const Order = require('./models/Order');
 const Work = require('./models/Work');
 const bcrypt = require('bcryptjs');
-const multer = require('multer');
+const upload = require("./config/multer");
+
 const fs = require('fs');
 
 const app = express();
@@ -16,38 +21,29 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadDir = 'public/uploads/';
-        // Create directory if it doesn't exist
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'profile-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
 
-const upload = multer({ 
-    storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB limit
-    },
-    fileFilter: function (req, file, cb) {
-        const allowedTypes = /jpeg|jpg|png|gif|webp/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
+
+
+
+
+
+// const upload = multer({ 
+//     storage: storage,
+//     limits: {
+//         fileSize: 5 * 1024 * 1024 // 5MB limit
+//     },
+//     fileFilter: function (req, file, cb) {
+//         const allowedTypes = /jpeg|jpg|png|gif|webp/;
+//         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+//         const mimetype = allowedTypes.test(file.mimetype);
         
-        if (mimetype && extname) {
-            return cb(null, true);
-        } else {
-            cb(new Error('Only image files (JPEG, PNG, GIF, WebP) are allowed'));
-        }
-    }
-});
+//         if (mimetype && extname) {
+//             return cb(null, true);
+//         } else {
+//             cb(new Error('Only image files (JPEG, PNG, GIF, WebP) are allowed'));
+//         }
+//     }
+// });
 
 // Connect to MongoDB
 connectDB();
@@ -605,10 +601,11 @@ app.post('/update-profile', upload.single('profileImage'), async (req, res) => {
         };
         
         // Handle profile image upload
-        if (req.file) {
-            updateData.profileImage = '/uploads/' + req.file.filename;
-            console.log('Image uploaded:', updateData.profileImage);
-        }
+        // Handle profile image upload
+if (req.file) {
+    updateData.profileImage = req.file.path;
+    console.log('Cloudinary Image URL:', updateData.profileImage);
+}
         
         // Add labour-specific fields if user is a labour
         const user = await User.findById(req.session.userId);
