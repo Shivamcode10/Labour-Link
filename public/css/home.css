@@ -193,6 +193,8 @@ body {
     font-size: 20px;
 }
 
+
+
 .card-1 {
     top: 20%;
     left: -10%;
@@ -305,6 +307,7 @@ section {
     transition: all 0.3s ease;
     opacity: 0;
     transform: translateY(30px);
+    
 }
 
 .service-card.animate-in {
@@ -332,6 +335,31 @@ section {
     color: var(--gray);
     font-size: 0.9rem;
     margin: 0;
+}
+/* Fix Service Cards Grid and Equal Heights */
+.services-section .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.services-section .col-md-3 {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.service-card p {
+    flex-grow: 1;
+}
+
+.service-stats {
+    margin-top: auto;
 }
 
 /* Featured Professionals */

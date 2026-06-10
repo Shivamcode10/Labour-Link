@@ -220,73 +220,129 @@
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="section-services">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>Our Services</h2>
-                <p class="section-subtitle">Professional services for all your needs</p>
+<!-- Services Section -->
+<section class="services-section py-5" id="services">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Find skilled professionals for all your needs</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Plumbing Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Plumber">
+                    <div class="service-icon">
+                        <i class="fas fa-faucet"></i>
+                    </div>
+                    <h5>Plumbing</h5>
+                    <p>Pipe repairs, installation, and maintenance</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Plumber'] || 0 %> Professionals</span>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
-                        <i class="fas fa-tint"></i>
-                        <h5>Plumbing</h5>
-                        <p>Pipe repairs, installation, maintenance</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
+            
+            <!-- Electrical Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Electrician">
+                    <div class="service-icon">
                         <i class="fas fa-bolt"></i>
-                        <h5>Electrical</h5>
-                        <p>Wiring, repairs, installations</p>
+                    </div>
+                    <h5>Electrical</h5>
+                    <p>Wiring, repairs, and electrical installations</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Electrician'] || 0 %> Professionals</span>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
+            </div>
+            
+            <!-- Carpentry Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Carpenter">
+                    <div class="service-icon">
                         <i class="fas fa-hammer"></i>
-                        <h5>Carpentry</h5>
-                        <p>Furniture, repairs, custom work</p>
+                    </div>
+                    <h5>Carpentry</h5>
+                    <p>Furniture, repairs, and woodwork</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Carpenter'] || 0 %> Professionals</span>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
+            </div>
+            
+            <!-- Painting Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Painter">
+                    <div class="service-icon">
                         <i class="fas fa-paint-roller"></i>
-                        <h5>Painting</h5>
-                        <p>Home, office, interior, exterior</p>
+                    </div>
+                    <h5>Painting</h5>
+                    <p>Wall painting, decoration, and finishing</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Painter'] || 0 %> Professionals</span>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
-                        <i class="fas fa-cube"></i>
-                        <h5>Masonry</h5>
-                        <p>Brickwork, concrete, repairs</p>
+            </div>
+
+            <!-- AC Repair Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="AC Repair">
+                    <div class="service-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h5>AC Repair</h5>
+                    <p>AC installation, maintenance, and repair</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['AC Repair'] || 0 %> Professionals</span>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
-                        <i class="fas fa-fan"></i>
-                        <h5>AC Repair</h5>
-                        <p>Installation, maintenance, repair</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
-                        <i class="fas fa-tree"></i>
-                        <h5>Gardening</h5>
-                        <p>Landscaping, maintenance</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="service-card">
+            </div>
+
+            <!-- Cleaning Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Cleaner">
+                    <div class="service-icon">
                         <i class="fas fa-broom"></i>
-                        <h5>Cleaning</h5>
-                        <p>Home, office, deep cleaning</p>
+                    </div>
+                    <h5>Cleaning</h5>
+                    <p>Home, office, and industrial cleaning</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Cleaner'] || 0 %> Professionals</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gardening Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Gardener">
+                    <div class="service-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h5>Gardening</h5>
+                    <p>Landscaping, lawn care, and maintenance</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Gardener'] || 0 %> Professionals</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Masonry Service -->
+            <div class="col-md-3 col-sm-6">
+                <div class="service-card" data-profession="Mason">
+                    <div class="service-icon">
+                        <i class="fas fa-ruler-combined"></i>
+                    </div>
+                    <h5>Masonry</h5>
+                    <p>Brickwork, construction, and repairs</p>
+                    <div class="service-stats">
+                        <span><i class="fas fa-users"></i> <%= professionCounts['Mason'] || 0 %> Professionals</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Featured Professionals -->
     <section id="featured-pros" class="section-featured">
@@ -731,5 +787,61 @@
         });
     </script>
     <script src="/js/calculator.js"></script>
+        <!-- Existing scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Add this new script for service clicks -->
+    <script>
+        // Service card click handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make service cards clickable
+            const serviceCards = document.querySelectorAll('.service-card');
+            
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const profession = this.getAttribute('data-profession');
+                    // Redirect to find-labour page with profession filter
+                    window.location.href = `/find-labour?profession=${encodeURIComponent(profession)}`;
+                });
+                
+                // Add hover effects
+                card.addEventListener('mouseenter', function() {
+                    this.style.cursor = 'pointer';
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add click effect
+            serviceCards.forEach(card => {
+                card.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(-2px) scale(0.98)';
+                });
+                
+                card.addEventListener('mouseup', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+            });
+        });
+
+        // Optional: Add smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
 </body>
 </html>

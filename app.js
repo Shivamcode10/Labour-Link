@@ -129,6 +129,17 @@ app.get('/home', async (req, res) => {
         const totalCustomers = await User.countDocuments({ userType: 'customer', isActive: true });
         const completedJobs = await Order.countDocuments({ status: 'completed' });
 
+        const professionCounts = {
+            'Plumber': await User.countDocuments({ userType: 'labour', profession: 'Plumber', isActive: true }),
+            'Electrician': await User.countDocuments({ userType: 'labour', profession: 'Electrician', isActive: true }),
+            'Carpenter': await User.countDocuments({ userType: 'labour', profession: 'Carpenter', isActive: true }),
+            'Painter': await User.countDocuments({ userType: 'labour', profession: 'Painter', isActive: true }),
+            'AC Repair': await User.countDocuments({ userType: 'labour', profession: 'AC Repair', isActive: true }),
+            'Cleaner': await User.countDocuments({ userType: 'labour', profession: 'Cleaner', isActive: true }),
+            'Gardener': await User.countDocuments({ userType: 'labour', profession: 'Gardener', isActive: true }),
+            'Mason': await User.countDocuments({ userType: 'labour', profession: 'Mason', isActive: true })
+        };
+
         res.render('home', {
             featuredLabours,
             allLabours: JSON.stringify(allLabours), // ADD THIS LINE
@@ -138,6 +149,7 @@ app.get('/home', async (req, res) => {
                 totalCustomers,
                 completedJobs
             },
+            professionCounts,
             user: req.session.userId ? await User.findById(req.session.userId) : null
         });
     } catch (error) {
@@ -147,6 +159,7 @@ app.get('/home', async (req, res) => {
             allLabours: '[]', // ADD THIS LINE FOR ERROR CASE
             recentJobs: [],
             stats: { totalLabours: 0, totalCustomers: 0, completedJobs: 0 },
+            professionCounts: {},
             user: null
         });
     }
