@@ -12,6 +12,8 @@ const Order = require('./models/Order');
 const Work = require('./models/Work');
 const bcrypt = require('bcryptjs');
 const upload = require("./config/multer");
+const MongoStore = require('connect-mongo');
+
 
 const fs = require('fs');
 
@@ -56,9 +58,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: 'labourlink-secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
