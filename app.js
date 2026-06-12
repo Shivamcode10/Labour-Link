@@ -22,33 +22,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configure multer for file uploads
-
-
-
-
-
-
-// const upload = multer({ 
-//     storage: storage,
-//     limits: {
-//         fileSize: 5 * 1024 * 1024 // 5MB limit
-//     },
-//     fileFilter: function (req, file, cb) {
-//         const allowedTypes = /jpeg|jpg|png|gif|webp/;
-//         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-//         const mimetype = allowedTypes.test(file.mimetype);
-        
-//         if (mimetype && extname) {
-//             return cb(null, true);
-//         } else {
-//             cb(new Error('Only image files (JPEG, PNG, GIF, WebP) are allowed'));
-//         }
-//     }
-// });
-
 // Connect to MongoDB
-connectDB();
+connectDB().catch(console.error);
 
 // Set EJS as template engine
 app.set('view engine', 'ejs');
@@ -67,25 +42,19 @@ app.use(session({
     }
 }));
 
-// Add this middleware to debug sessions
-app.use((req, res, next) => {
-    console.log('Session data:', req.session);
-    next();
-});
-
 // Multer error handling middleware
 app.use(async (error, req, res, next) => {
     if (error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
             return res.status(400).render('error', { 
                 error: 'File too large. Maximum size is 5MB.',
-                user: req.session.userId ? await User.findById(req.session.userId) : null
+                user: req.session?.userId ? await User.findById(req.session.userId) : null
             });
         }
     } else if (error) {
         return res.status(400).render('error', { 
             error: error.message,
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
     next();
@@ -100,7 +69,6 @@ app.get("/", (req, res) => {
 
 app.get('/home', async (req, res) => {
     try {
-        // Get featured labours for the homepage
         const featuredLabours = await User.find({ 
             userType: 'labour', 
             isActive: true,
@@ -109,21 +77,18 @@ app.get('/home', async (req, res) => {
         .sort({ rating: -1, totalReviews: -1 })
         .limit(6);
 
-        // Get ALL labours with location data for the map
         const allLabours = await User.find({ 
             userType: 'labour', 
             isActive: true
         })
         .select('name profession rating location profileImage wagePerHour _id');
 
-        // Get recent jobs (from orders)
         const recentJobs = await Order.find({ status: 'pending' })
             .populate('customerId', 'name')
             .populate('labourId', 'name profession')
             .sort({ createdAt: -1 })
             .limit(6);
 
-        // Get statistics for the homepage
         const totalLabours = await User.countDocuments({ userType: 'labour', isActive: true });
         const totalCustomers = await User.countDocuments({ userType: 'customer', isActive: true });
         const completedJobs = await Order.countDocuments({ status: 'completed' });
@@ -141,7 +106,7 @@ app.get('/home', async (req, res) => {
 
         res.render('home', {
             featuredLabours,
-            allLabours: JSON.stringify(allLabours), // ADD THIS LINE
+            allLabours: JSON.stringify(allLabours),
             recentJobs,
             stats: {
                 totalLabours,
@@ -149,13 +114,13 @@ app.get('/home', async (req, res) => {
                 completedJobs
             },
             professionCounts,
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     } catch (error) {
         console.error('Error loading home page:', error);
         res.render('home', { 
             featuredLabours: [],
-            allLabours: '[]', // ADD THIS LINE FOR ERROR CASE
+            allLabours: '[]',
             recentJobs: [],
             stats: { totalLabours: 0, totalCustomers: 0, completedJobs: 0 },
             professionCounts: {},
@@ -168,8 +133,7 @@ app.get('/home', async (req, res) => {
 
 // Login Page (GET)
 app.get('/login', async (req, res) => {
-    // If user is already logged in, redirect to appropriate profile
-    if (req.session.userId) {
+    if (req.session?.userId) {
         if (req.session.userType === 'customer') {
             return res.redirect('/profile/customer');
         } else {
@@ -178,7 +142,6 @@ app.get('/login', async (req, res) => {
     }
       
     const registerAs = req.query.register;
-    console.log('Register parameter:', registerAs);
     
     res.render('login', { 
         error: null,
@@ -215,7 +178,6 @@ app.post('/login', async (req, res) => {
 });
 
 // Register Handler (POST)
-// Register Handler (POST) - Enhanced with location and step-by-step data
 app.post('/register', async (req, res) => {
     const { 
         name, email, password, phone, age, userType, 
@@ -224,7 +186,6 @@ app.post('/register', async (req, res) => {
     } = req.body;
     
     try {
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.render('login', { 
@@ -233,7 +194,6 @@ app.post('/register', async (req, res) => {
             });
         }
 
-        // Validate required fields
         if (!name || !email || !password || !phone || !userType || !city || !state) {
             return res.render('login', { 
                 error: 'All required fields must be filled',
@@ -241,7 +201,6 @@ app.post('/register', async (req, res) => {
             });
         }
 
-        // Validate labour-specific fields
         if (userType === 'labour' && (!profession || !experience)) {
             return res.render('login', { 
                 error: 'Profession and experience are required for professionals',
@@ -251,7 +210,6 @@ app.post('/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        // Build user data with location
         const userData = {
             name,
             email,
@@ -268,7 +226,6 @@ app.post('/register', async (req, res) => {
             isActive: true
         };
 
-        // Add location coordinates if provided
         if (lat && lng) {
             userData.location = {
                 type: 'Point',
@@ -276,7 +233,6 @@ app.post('/register', async (req, res) => {
             };
         }
 
-        // Add labour-specific fields
         if (userType === 'labour') {
             userData.profession = profession;
             userData.experience = experience;
@@ -289,14 +245,13 @@ app.post('/register', async (req, res) => {
         const user = new User(userData);
         await user.save();
 
-        // Set session
+        // Set session — plain assignment, no optional chaining on left side
         req.session.userId = user._id;
         req.session.userType = user.userType;
         req.session.userName = user.name;
         
         console.log('Registration successful - User:', user.name, 'Type:', user.userType);
         
-        // Redirect based on user type
         if (userType === 'customer') {
             res.redirect('/profile/customer');
         } else {
@@ -320,7 +275,6 @@ app.get('/logout', (req, res) => {
             console.error('Error destroying session:', err);
         }
         
-        // Check if we should redirect to labour registration
         if (redirectTo === 'labour') {
             return res.redirect('/login?register=labour');
         }
@@ -331,8 +285,6 @@ app.get('/logout', (req, res) => {
 
 // ==================== PROFILE ROUTES ====================
 
-// ==================== PROFILE VIEWING ROUTES ====================
-
 // Professional Public Profile
 app.get('/professional/:id', async (req, res) => {
     try {
@@ -340,16 +292,14 @@ app.get('/professional/:id', async (req, res) => {
         
         if (!professional || professional.userType !== 'labour') {
             return res.status(404).render('404', { 
-                user: req.session.userId ? await User.findById(req.session.userId) : null 
+                user: req.session?.userId ? await User.findById(req.session.userId) : null 
             });
         }
 
-        // Get professional's works
         const works = await Work.find({ labourId: req.params.id })
             .sort({ completedDate: -1 })
             .limit(10);
 
-        // Get professional's reviews
         const reviews = await Order.find({ 
             labourId: req.params.id, 
             customerRating: { $exists: true, $ne: null } 
@@ -358,12 +308,10 @@ app.get('/professional/:id', async (req, res) => {
         .sort({ completedDate: -1 })
         .limit(20);
 
-        // Calculate average rating
         const averageRating = reviews.length > 0 
             ? (reviews.reduce((sum, review) => sum + review.customerRating, 0) / reviews.length).toFixed(1)
             : 0;
 
-        // Get similar professionals (same profession)
         const similarProfessionals = await User.find({
             _id: { $ne: req.params.id },
             userType: 'labour',
@@ -381,35 +329,33 @@ app.get('/professional/:id', async (req, res) => {
             averageRating,
             totalReviews: reviews.length,
             similarProfessionals,
-            user: req.session.userId ? await User.findById(req.session.userId) : null,
-            isOwner: req.session.userId === req.params.id
+            user: req.session?.userId ? await User.findById(req.session.userId) : null,
+            isOwner: req.session?.userId?.toString() === req.params.id
         });
     } catch (error) {
         console.error('Error loading professional profile:', error);
         res.status(500).render('error', { 
             error: 'Error loading professional profile',
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
 });
 
 // Contact Professional (Send Message/Request)
 app.post('/contact-professional', async (req, res) => {
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
         return res.status(401).json({ success: false, message: 'Please login to contact professionals' });
     }
 
     try {
         const { professionalId, message, serviceType, budget, timeline } = req.body;
         
-        const customer = await User.findById(req.session.userId);
         const professional = await User.findById(professionalId);
 
         if (!professional || professional.userType !== 'labour') {
             return res.status(404).json({ success: false, message: 'Professional not found' });
         }
 
-        // Create a new order/request
         const order = new Order({
             customerId: req.session.userId,
             labourId: professionalId,
@@ -435,21 +381,19 @@ app.post('/contact-professional', async (req, res) => {
 
 // Leave Review for Professional
 app.post('/leave-review', async (req, res) => {
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
         return res.status(401).json({ success: false, message: 'Please login to leave a review' });
     }
 
     try {
         const { professionalId, rating, comment, orderId } = req.body;
         
-        // Update the order with review
         await Order.findByIdAndUpdate(orderId, {
             customerRating: parseInt(rating),
             customerReview: comment,
             reviewDate: new Date()
         });
 
-        // Update professional's average rating
         const professionalReviews = await Order.find({ 
             labourId: professionalId, 
             customerRating: { $exists: true } 
@@ -477,7 +421,7 @@ app.post('/leave-review', async (req, res) => {
 
 // Customer Profile
 app.get('/profile/customer', async (req, res) => {
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
         return res.redirect('/login');
     }
     
@@ -485,13 +429,10 @@ app.get('/profile/customer', async (req, res) => {
         const user = await User.findById(req.session.userId);
         
         if (!user) {
-            console.log('User not found');
             return res.redirect('/login');
         }
         
-        // Check if user is actually a customer
         if (user.userType !== 'customer') {
-            console.log('User is not a customer, redirecting to labour profile');
             return res.redirect('/profile/labour');
         }
         
@@ -513,9 +454,8 @@ app.get('/profile/customer', async (req, res) => {
 });
 
 // Labour Profile
-// Labour Profile route - add debugging
 app.get('/profile/labour', async (req, res) => {
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
         return res.redirect('/login');
     }
     
@@ -526,7 +466,6 @@ app.get('/profile/labour', async (req, res) => {
             return res.redirect('/login');
         }
         
-        // Check if user is actually a labour
         if (user.userType !== 'labour') {
             return res.redirect('/profile/customer');
         }
@@ -535,12 +474,6 @@ app.get('/profile/labour', async (req, res) => {
         const orders = await Order.find({ labourId: req.session.userId })
             .populate('customerId', 'name profileImage')
             .sort({ createdAt: -1 });
-        
-        console.log('Labour profile data:', {
-            name: user.name,
-            profileImage: user.profileImage,
-            hasProfileImage: !!user.profileImage
-        });
         
         res.render('labourProfile', { 
             labour: user, 
@@ -555,9 +488,10 @@ app.get('/profile/labour', async (req, res) => {
         });
     }
 });
+
 // Edit Profile Page
 app.get('/edit-profile', async (req, res) => {
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
         return res.redirect('/login');
     }
     
@@ -583,7 +517,7 @@ app.get('/edit-profile', async (req, res) => {
 
 // Update Profile
 app.post('/update-profile', upload.single('profileImage'), async (req, res) => {
-    if (!req.session.userId) {
+    if (!req.session?.userId) {
         return res.redirect('/login');
     }
     
@@ -603,14 +537,11 @@ app.post('/update-profile', upload.single('profileImage'), async (req, res) => {
             }
         };
         
-        // Handle profile image upload
-        // Handle profile image upload
-if (req.file) {
-    updateData.profileImage = req.file.path;
-    console.log('Cloudinary Image URL:', updateData.profileImage);
-}
+        if (req.file) {
+            updateData.profileImage = req.file.path;
+            console.log('Cloudinary Image URL:', updateData.profileImage);
+        }
         
-        // Add labour-specific fields if user is a labour
         const user = await User.findById(req.session.userId);
         if (user.userType === 'labour') {
             updateData.profession = profession;
@@ -621,7 +552,6 @@ if (req.file) {
         
         await User.findByIdAndUpdate(req.session.userId, updateData);
         
-        // Redirect back to appropriate profile
         if (user.userType === 'customer') {
             res.redirect('/profile/customer');
         } else {
@@ -632,7 +562,7 @@ if (req.file) {
         console.error('Error updating profile:', error);
         res.status(500).render('error', { 
             error: 'Error updating profile',
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
 });
@@ -644,10 +574,8 @@ app.get('/find-labour', async (req, res) => {
     try {
         const { search, profession, minRating, maxPrice, sortBy } = req.query;
         
-        // Build filter object
         let filter = { userType: 'labour', isActive: true };
         
-        // Search filter
         if (search) {
             filter.$or = [
                 { name: { $regex: search, $options: 'i' } },
@@ -656,17 +584,14 @@ app.get('/find-labour', async (req, res) => {
             ];
         }
         
-        // Profession filter
         if (profession && profession !== 'all') {
             filter.profession = profession;
         }
         
-        // Rating filter
         if (minRating) {
             filter.rating = { $gte: parseFloat(minRating) };
         }
         
-        // Price filter
         if (maxPrice) {
             filter.$or = [
                 { wagePerHour: { $lte: parseFloat(maxPrice) } },
@@ -674,7 +599,6 @@ app.get('/find-labour', async (req, res) => {
             ];
         }
         
-        // Sort options
         let sortOptions = {};
         switch(sortBy) {
             case 'rating':
@@ -706,14 +630,14 @@ app.get('/find-labour', async (req, res) => {
                 maxPrice: maxPrice || '',
                 sortBy: sortBy || 'rating'
             },
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
         
     } catch (error) {
         console.error('Error finding labour:', error);
         res.status(500).render('error', { 
             error: 'Error loading labour search page',
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
 });
@@ -735,7 +659,7 @@ app.get('/labour/:id', async (req, res) => {
         
         if (!labour || labour.userType !== 'labour') {
             return res.status(404).render('404', { 
-                user: req.session.userId ? await User.findById(req.session.userId) : null 
+                user: req.session?.userId ? await User.findById(req.session.userId) : null 
             });
         }
         
@@ -743,21 +667,21 @@ app.get('/labour/:id', async (req, res) => {
             labour,
             works,
             reviews,
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
         
     } catch (error) {
         console.error('Error loading labour detail:', error);
         res.status(500).render('error', { 
             error: 'Error loading labour profile',
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
 });
 
 // Add new work
 app.post('/add-work', async (req, res) => {
-    if (!req.session.userId || req.session.userType !== 'labour') {
+    if (!req.session?.userId || req.session.userType !== 'labour') {
         return res.redirect('/login');
     }
     
@@ -778,14 +702,14 @@ app.post('/add-work', async (req, res) => {
         console.error('Error adding work:', error);
         res.status(500).render('error', { 
             error: 'Error adding work',
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
 });
 
 // Update wage information
 app.post('/update-wage', async (req, res) => {
-    if (!req.session.userId || req.session.userType !== 'labour') {
+    if (!req.session?.userId || req.session.userType !== 'labour') {
         return res.redirect('/login');
     }
     
@@ -802,55 +726,17 @@ app.post('/update-wage', async (req, res) => {
         console.error('Error updating wage information:', error);
         res.status(500).render('error', { 
             error: 'Error updating wage information',
-            user: req.session.userId ? await User.findById(req.session.userId) : null
+            user: req.session?.userId ? await User.findById(req.session.userId) : null
         });
     }
 });
 
 // ==================== ERROR HANDLING ====================
 
-// Error handler
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    
-    // If it's a multer file upload error
-    if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).send('File too large');
-    }
-    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-        return res.status(400).send('Too many files');
-    }
-    
-    res.status(err.status || 500);
-    
-    // Check if the request expects JSON
-    if (req.accepts('json')) {
-        res.json({ 
-            error: err.message || 'Something went wrong!',
-            ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-        });
-    } else {
-        // Fallback to simple text response
-        res.type('txt').send(err.message || 'Something went wrong!');
-    }
-});
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404);
-    
-    if (req.accepts('json')) {
-        res.json({ error: 'Not found' });
-    } else {
-        res.type('txt').send('Not found');
-    }
-});
-
-
 // 404 Handler
 app.use(async (req, res) => {
     res.status(404).render('404', { 
-        user: req.session.userId ? await User.findById(req.session.userId) : null 
+        user: req.session?.userId ? await User.findById(req.session.userId) : null 
     });
 });
 
@@ -859,7 +745,7 @@ app.use(async (err, req, res, next) => {
     console.error('Server error:', err);
     res.status(500).render('error', { 
         error: 'Internal server error',
-        user: req.session.userId ? await User.findById(req.session.userId) : null 
+        user: req.session?.userId ? await User.findById(req.session.userId) : null 
     });
 });
 
