@@ -16,7 +16,7 @@ const bcrypt = require('bcryptjs');
 const { workUpload } = require("./config/multer");
 const upload = require("./config/multer");
 const MongoStore = require('connect-mongo');
-
+const passport = require('./config/passport');
 
 const fs = require('fs');
 
@@ -33,6 +33,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json()); 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,6 +46,11 @@ app.use(session({
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+const authRouter = require('./routes/auth');
+app.use('/', authRouter);
 
 // Multer error handling middleware
 app.use(async (error, req, res, next) => {

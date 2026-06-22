@@ -316,9 +316,7 @@
 
                             <div class="info-group">
                                 <label>Age</label>
-                                <p class="mb-0">
-                                    <%= customer.age %> years
-                                </p>
+                                <p class="mb-0"><%= customer.age ? customer.age + ' years' : 'Not provided' %></p>
                             </div>
 
                             <div class="info-group">

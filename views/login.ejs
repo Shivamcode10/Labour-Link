@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LabourLink - Join Our Community</title>
+    <title>LabourLink — Join Our Community</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/login.css">
@@ -13,422 +13,403 @@
       data-login-error="<%= error ? error.replace(/"/g, '&quot;') : '' %>"
       data-presel-type="<%= typeof preSelectUserType !== 'undefined' && preSelectUserType ? preSelectUserType : '' %>"
       data-login-email="<%= typeof loginEmail !== 'undefined' && loginEmail ? loginEmail.replace(/"/g, '&quot;') : '' %>">
-    <!-- Animated Background -->
-    <div class="background-animation">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-        <div class="shape shape-4"></div>
-    </div>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light login-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-hands-helping me-2"></i>
+    <nav class="login-navbar">
+        <div class="nav-inner">
+            <a class="brand" href="/">
+                <div class="brand-icon"><i class="fas fa-hands-helping"></i></div>
                 <span>LabourLink</span>
             </a>
-            <a href="/" class="btn btn-outline-light">
-                <i class="fas fa-home me-2"></i>Back to Home
+            <a href="/" class="btn-home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
             </a>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="login-container">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-10">
-                    <div class="login-card">
-                        <!-- Header Section -->
-                        <div class="login-header text-center">
-                            <div class="header-icon">
-                                <i class="fas fa-hands-helping"></i>
+    <div class="login-wrap">
+        <div class="login-card">
+
+            <!-- Header -->
+            <div class="login-header">
+                <div class="header-orb">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h1>Join LabourLink</h1>
+                <p>Connect with skilled professionals or showcase your expertise</p>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-track"></div>
+                <div class="step active" data-step="1">
+                    <div class="step-circle"><span class="step-num">1</span><i class="fas fa-check step-check"></i></div>
+                    <span class="step-label">Account Type</span>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle"><span class="step-num">2</span><i class="fas fa-check step-check"></i></div>
+                    <span class="step-label">Details</span>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle"><span class="step-num">3</span><i class="fas fa-check step-check"></i></div>
+                    <span class="step-label">Location</span>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle"><span class="step-num">4</span><i class="fas fa-check step-check"></i></div>
+                    <span class="step-label">Complete</span>
+                </div>
+            </div>
+
+            <!-- ── STEP 1: Account Type ── -->
+            <div class="form-step active" id="step1">
+                <div class="step-content">
+                    <div class="step-heading">
+                        <h3>Choose your path</h3>
+                        <p>How do you want to use LabourLink?</p>
+                    </div>
+
+                    <div class="type-grid">
+                        <div class="user-type-card" data-type="customer">
+                            <div class="type-icon customer-icon">
+                                <i class="fas fa-search"></i>
                             </div>
-                            <h1>Join LabourLink Community</h1>
-                            <p class="text-muted">Connect with skilled professionals or showcase your expertise</p>
+                            <h4>Find Professionals</h4>
+                            <p>Looking for skilled workers for your projects</p>
+                            <ul class="benefit-list">
+                                <li><i class="fas fa-check-circle"></i>Browse verified professionals</li>
+                                <li><i class="fas fa-check-circle"></i>Compare ratings &amp; reviews</li>
+                                <li><i class="fas fa-check-circle"></i>Secure hiring process</li>
+                            </ul>
+                            <div class="type-selected-badge"><i class="fas fa-check"></i> Selected</div>
                         </div>
 
-                        <!-- Progress Steps -->
-                        <div class="progress-steps">
-                            <div class="step active" data-step="1">
-                                <div class="step-circle">1</div>
-                                <span>Account Type</span>
+                        <div class="user-type-card" data-type="labour">
+                            <div class="type-icon labour-icon">
+                                <i class="fas fa-tools"></i>
                             </div>
-                            <div class="step" data-step="2">
-                                <div class="step-circle">2</div>
-                                <span>Details</span>
-                            </div>
-                            <div class="step" data-step="3">
-                                <div class="step-circle">3</div>
-                                <span>Location</span>
-                            </div>
-                            <div class="step" data-step="4">
-                                <div class="step-circle">4</div>
-                                <span>Complete</span>
-                            </div>
+                            <h4>Work as Professional</h4>
+                            <p>Offer your skills and grow your business</p>
+                            <ul class="benefit-list">
+                                <li><i class="fas fa-check-circle"></i>Reach more customers</li>
+                                <li><i class="fas fa-check-circle"></i>Build your reputation</li>
+                                <li><i class="fas fa-check-circle"></i>Secure payments</li>
+                            </ul>
+                            <div class="type-selected-badge"><i class="fas fa-check"></i> Selected</div>
                         </div>
+                    </div>
 
-                        <!-- Step 1: Account Type Selection -->
-                        <div class="form-step active" id="step1">
-                            <div class="step-content">
-                                <h3>Choose Your Path</h3>
-                                <p class="step-description">Select how you want to use LabourLink</p>
-                                
-                                <div class="user-type-cards">
-                                    <div class="user-type-card" data-type="customer">
-                                        <div class="card-icon">
-                                            <i class="fas fa-search"></i>
-                                        </div>
-                                        <h4>Find Professionals</h4>
-                                        <p>Looking for skilled workers for your projects</p>
-                                        <ul class="benefits-list">
-                                            <li><i class="fas fa-check"></i> Browse verified professionals</li>
-                                            <li><i class="fas fa-check"></i> Compare ratings & reviews</li>
-                                            <li><i class="fas fa-check"></i> Secure hiring process</li>
-                                        </ul>
-                                        <div class="selection-indicator">
-                                            <i class="fas fa-check-circle"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="user-type-card" data-type="labour">
-                                        <div class="card-icon">
-                                            <i class="fas fa-tools"></i>
-                                        </div>
-                                        <h4>Work as Professional</h4>
-                                        <p>Offer your skills and grow your business</p>
-                                        <ul class="benefits-list">
-                                            <li><i class="fas fa-check"></i> Reach more customers</li>
-                                            <li><i class="fas fa-check"></i> Build your reputation</li>
-                                            <li><i class="fas fa-check"></i> Secure payments</li>
-                                        </ul>
-                                        <div class="selection-indicator">
-                                            <i class="fas fa-check-circle"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="step-actions">
-                                    <button class="btn btn-primary btn-next" data-next="2" disabled>
-                                        Continue <i class="fas fa-arrow-right ms-2"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Step 2: Login & Registration -->
-                        <div class="form-step" id="step2">
-                            <div class="step-content">
-                                <h3>Account Setup</h3>
-                                <p class="step-description" id="step2Description">Sign in or create your account</p>
-
-                                <div class="forms-container">
-                                    <div class="row">
-                                        <!-- Login Form -->
-                                        <div class="col-lg-6">
-                                            <div class="form-card">
-                                                <div class="form-header">
-                                                    <i class="fas fa-sign-in-alt"></i>
-                                                    <h4>Welcome Back</h4>
-                                                    <p>Sign in to your account</p>
-                                                </div>
-                                                <div class="alert alert-danger alert-dismissible fade show d-none" id="loginErrorAlert" role="alert">
-                                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                                    <span id="loginErrorText"></span>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                </div>
-                                                <form id="loginForm" action="/login" method="POST">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="email" class="form-control" id="loginEmail" name="email"
-                                                               placeholder="name@example.com" value="<%= typeof loginEmail !== 'undefined' && loginEmail ? loginEmail : '' %>" required>
-                                                        <label for="loginEmail"><i class="fas fa-envelope me-2"></i>Email address</label>
-                                                    </div>
-                                                    <div class="form-floating mb-3">
-                                                        <input type="password" class="form-control" id="loginPassword" name="password"
-                                                               placeholder="Password" required>
-                                                        <label for="loginPassword"><i class="fas fa-lock me-2"></i>Password</label>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary w-100 login-btn">
-                                                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-
-                                        <!-- Registration Form -->
-                                        <div class="col-lg-6">
-                                            <div class="form-card">
-                                                <div class="form-header">
-                                                    <i class="fas fa-user-plus"></i>
-                                                    <h4>Create Account</h4>
-                                                    <p>Join our community today</p>
-                                                </div>
-                                                <form id="registerForm">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" class="form-control" id="registerName" name="name"
-                                                               placeholder="Full Name" required>
-                                                        <label for="registerName"><i class="fas fa-user me-2"></i>Full Name</label>
-                                                    </div>
-                                                    <div class="form-floating mb-3">
-                                                        <input type="email" class="form-control" id="registerEmail" name="email"
-                                                               placeholder="name@example.com" required>
-                                                        <label for="registerEmail"><i class="fas fa-envelope me-2"></i>Email address</label>
-                                                    </div>
-                                                    <div class="form-floating mb-3">
-                                                        <input type="password" class="form-control" id="registerPassword" name="password"
-                                                               placeholder="Password" required minlength="6">
-                                                        <label for="registerPassword"><i class="fas fa-lock me-2"></i>Password (min. 6 characters)</label>
-                                                    </div>
-                                                    <div class="form-floating mb-3">
-                                                        <input type="tel" class="form-control" id="registerPhone" name="phone"
-                                                               placeholder="Phone Number" required pattern="[0-9]{10}">
-                                                        <label for="registerPhone"><i class="fas fa-phone me-2"></i>Phone Number (10 digits)</label>
-                                                    </div>
-                                                    <div class="form-floating mb-3">
-                                                        <input type="number" class="form-control" id="registerAge" name="age"
-                                                               placeholder="Age" min="18" max="100" required>
-                                                        <label for="registerAge"><i class="fas fa-birthday-cake me-2"></i>Age (18+)</label>
-                                                    </div>
-
-                                                    <!-- Professional Fields (Hidden by default) -->
-                                                    <div id="professionalFields" style="display: none;">
-                                                        <div class="section-title mb-3">
-                                                            <i class="fas fa-user-tie me-2"></i>Professional Information
-                                                        </div>
-                                                        <div class="form-floating mb-3">
-                                                            <select class="form-select" id="profession" name="profession">
-                                                                <option value="">Select your profession</option>
-                                                                <option value="Plumber">Plumber</option>
-                                                                <option value="Electrician">Electrician</option>
-                                                                <option value="Carpenter">Carpenter</option>
-                                                                <option value="Painter">Painter</option>
-                                                                <option value="Mason">Mason</option>
-                                                                <option value="AC Repair">AC Technician</option>
-                                                                <option value="Cleaner">Cleaner</option>
-                                                                <option value="Gardener">Gardener</option>
-                                                                <option value="Welder">Welder</option>
-                                                                <option value="Mechanic">Mechanic</option>
-                                                                <option value="Technician">Technician</option>
-                                                            </select>
-                                                            <label for="profession"><i class="fas fa-briefcase me-2"></i>Profession</label>
-                                                        </div>
-                                                        <div class="form-floating mb-3">
-                                                            <select class="form-select" id="experience" name="experience">
-                                                                <option value="">Select experience</option>
-                                                                <option value="0-1 years">0-1 years</option>
-                                                                <option value="1-3 years">1-3 years</option>
-                                                                <option value="3-5 years">3-5 years</option>
-                                                                <option value="5-10 years">5-10 years</option>
-                                                                <option value="10+ years">10+ years</option>
-                                                            </select>
-                                                            <label for="experience"><i class="fas fa-chart-line me-2"></i>Experience</label>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-floating mb-3">
-                                                                    <input type="number" class="form-control" id="wagePerHour" name="wagePerHour" 
-                                                                           placeholder="0.00" step="0.01" min="0">
-                                                                    <label for="wagePerHour"><i class="fas fa-clock me-2"></i>Wage per Hour (₹)</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-floating mb-3">
-                                                                    <input type="number" class="form-control" id="wagePerDay" name="wagePerDay" 
-                                                                           placeholder="0.00" step="0.01" min="0">
-                                                                    <label for="wagePerDay"><i class="fas fa-calendar-day me-2"></i>Wage per Day (₹)</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <button type="submit" class="btn btn-success w-100 register-btn">
-                                                        Continue to Location <i class="fas fa-arrow-right ms-2"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="step-actions">
-                                    <button class="btn btn-outline-secondary btn-prev" data-prev="1">
-                                        <i class="fas fa-arrow-left me-2"></i>Back
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Location Selection -->
-                        <div class="form-step" id="step3">
-                            <div class="step-content">
-                                <h3>Set Your Location</h3>
-                                <p class="step-description">Help us connect you with relevant opportunities in your area</p>
-
-                                <div class="location-section">
-                                    <div class="location-controls">
-                                        <div class="search-box">
-                                            <i class="fas fa-search search-icon"></i>
-                                            <input type="text" class="form-control search-input" 
-                                                   id="locationSearch" placeholder="Search your area, city, or landmark...">
-                                            <button type="button" class="btn btn-locate" id="useCurrentLocation">
-                                                <i class="fas fa-location-crosshairs"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="map-container">
-                                        <div id="addressMap"></div>
-                                        <div class="map-overlay">
-                                            <div class="location-info">
-                                                <i class="fas fa-info-circle"></i>
-                                                Click on the map to set your location
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="location-details mt-3">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="city" 
-                                                           placeholder="City" readonly>
-                                                    <label for="city"><i class="fas fa-city me-2"></i>City</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="state" 
-                                                           placeholder="State" readonly>
-                                                    <label for="state"><i class="fas fa-map me-2"></i>State</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="step-actions mt-4">
-                                    <button class="btn btn-outline-secondary btn-prev" data-prev="2">
-                                        <i class="fas fa-arrow-left me-2"></i>Back
-                                    </button>
-                                    <button class="btn btn-primary btn-next" data-next="4" disabled>
-                                        Review & Complete <i class="fas fa-arrow-right ms-2"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Step 4: Review & Complete -->
-                        <div class="form-step" id="step4">
-                            <div class="step-content">
-                                <h3>Review Your Information</h3>
-                                <p class="step-description">Please review your details before completing registration</p>
-
-                                <div class="review-section">
-                                    <div class="review-card">
-                                        <h5><i class="fas fa-user me-2"></i>Personal Information</h5>
-                                        <div class="review-details">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <strong>Name:</strong> <span id="reviewName">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Email:</strong> <span id="reviewEmail">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Phone:</strong> <span id="reviewPhone">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Age:</strong> <span id="reviewAge">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Account Type:</strong> <span id="reviewUserType">-</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="review-card" id="professionalReview" style="display: none;">
-                                        <h5><i class="fas fa-briefcase me-2"></i>Professional Information</h5>
-                                        <div class="review-details">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <strong>Profession:</strong> <span id="reviewProfession">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Experience:</strong> <span id="reviewExperience">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Wage/Hour:</strong> ₹<span id="reviewWageHour">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>Wage/Day:</strong> ₹<span id="reviewWageDay">-</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="review-card">
-                                        <h5><i class="fas fa-map-marker-alt me-2"></i>Location Information</h5>
-                                        <div class="review-details">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <strong>City:</strong> <span id="reviewCity">-</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <strong>State:</strong> <span id="reviewState">-</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Final Registration Form -->
-                                <div class="final-registration mt-4">
-                                    <form id="finalRegisterForm" action="/register" method="POST">
-                                        <!-- All collected data will be populated here -->
-                                        <input type="hidden" id="finalUserType" name="userType">
-                                        <input type="hidden" id="finalName" name="name">
-                                        <input type="hidden" id="finalEmail" name="email">
-                                        <input type="hidden" id="finalPassword" name="password">
-                                        <input type="hidden" id="finalPhone" name="phone">
-                                        <input type="hidden" id="finalAge" name="age">
-                                        <input type="hidden" id="finalProfession" name="profession">
-                                        <input type="hidden" id="finalExperience" name="experience">
-                                        <input type="hidden" id="finalWagePerHour" name="wagePerHour">
-                                        <input type="hidden" id="finalWagePerDay" name="wagePerDay">
-                                        <input type="hidden" id="finalCity" name="city">
-                                        <input type="hidden" id="finalState" name="state">
-                                        <input type="hidden" id="finalLat" name="lat">
-                                        <input type="hidden" id="finalLng" name="lng">
-                                    </form>
-                                    <div class="step-actions">
-                                        <button class="btn btn-outline-secondary btn-prev" data-prev="3">
-                                            <i class="fas fa-arrow-left me-2"></i>Back
-                                        </button>
-                                        <button type="button" class="btn btn-success final-register-btn">
-                                            <i class="fas fa-rocket me-2"></i>Complete Registration
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="step-actions end">
+                        <button class="btn-primary-action btn-next" data-next="2" disabled>
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Loading Spinner -->
+            <!-- ── STEP 2: Login & Register ── -->
+            <div class="form-step" id="step2">
+                <div class="step-content">
+                    <div class="step-heading">
+                        <h3>Account setup</h3>
+                        <p id="step2Description">Sign in or create your account</p>
+                    </div>
+
+                    <div class="forms-row">
+                        <!-- Login -->
+                        <div class="form-card">
+                            <div class="form-card-header">
+                                <div class="form-card-icon login-icon"><i class="fas fa-sign-in-alt"></i></div>
+                                <div>
+                                    <h4>Welcome back</h4>
+                                    <p>Sign in to your account</p>
+                                </div>
+                            </div>
+
+                            <div class="alert-box d-none" id="loginErrorAlert">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="loginErrorText"></span>
+                                <button type="button" class="alert-close" onclick="this.parentElement.classList.add('d-none')">&times;</button>
+                            </div>
+
+                            <form id="loginForm" action="/login" method="POST">
+                                <div class="field-group">
+                                    <label for="loginEmail"><i class="fas fa-envelope"></i> Email address</label>
+                                    <input type="email" id="loginEmail" name="email"
+                                           placeholder="you@example.com"
+                                           value="<%= typeof loginEmail !== 'undefined' && loginEmail ? loginEmail : '' %>" required>
+                                </div>
+                                <div class="field-group">
+                                    <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+                                    <div class="password-wrap">
+                                        <input type="password" id="loginPassword" name="password"
+                                               placeholder="Your password" required>
+                                        <button type="button" class="toggle-pw" onclick="togglePw('loginPassword',this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-submit">
+                                    <i class="fas fa-sign-in-alt"></i> Sign In
+                                </button>
+                            </form>
+
+                            <div class="divider"><span>or</span></div>
+
+                            <a href="/auth/google" class="btn-google">
+                                <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                </svg>
+                                Continue with Google
+                            </a>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="forms-divider"><span>or</span></div>
+
+                        <!-- Register -->
+                        <div class="form-card">
+                            <div class="form-card-header">
+                                <div class="form-card-icon register-icon"><i class="fas fa-user-plus"></i></div>
+                                <div>
+                                    <h4>Create account</h4>
+                                    <p>Join our community today</p>
+                                </div>
+                            </div>
+
+                            <form id="registerForm">
+                                <div class="field-group">
+                                    <label for="registerName"><i class="fas fa-user"></i> Full name</label>
+                                    <input type="text" id="registerName" name="name" placeholder="Your full name" required>
+                                </div>
+                                <div class="field-group">
+                                    <label for="registerEmail"><i class="fas fa-envelope"></i> Email address</label>
+                                    <input type="email" id="registerEmail" name="email" placeholder="you@example.com" required>
+                                </div>
+                                <div class="field-group">
+                                    <label for="registerPassword"><i class="fas fa-lock"></i> Password <small>(min. 6 characters)</small></label>
+                                    <div class="password-wrap">
+                                        <input type="password" id="registerPassword" name="password"
+                                               placeholder="Create a password" required minlength="6">
+                                        <button type="button" class="toggle-pw" onclick="togglePw('registerPassword',this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="fields-inline">
+                                    <div class="field-group">
+                                        <label for="registerPhone"><i class="fas fa-phone"></i> Phone</label>
+                                        <input type="tel" id="registerPhone" name="phone"
+                                               placeholder="10-digit number" required pattern="[0-9]{10}">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="registerAge"><i class="fas fa-birthday-cake"></i> Age</label>
+                                        <input type="number" id="registerAge" name="age"
+                                               placeholder="18+" min="18" max="100" required>
+                                    </div>
+                                </div>
+
+                                <!-- Professional fields -->
+                                <div id="professionalFields" class="professional-block" style="display:none;">
+                                    <div class="pro-section-label"><i class="fas fa-hard-hat"></i> Professional information</div>
+                                    <div class="field-group">
+                                        <label for="profession"><i class="fas fa-briefcase"></i> Profession</label>
+                                        <select id="profession" name="profession">
+                                            <option value="">Select your profession</option>
+                                            <option value="Plumber">Plumber</option>
+                                            <option value="Electrician">Electrician</option>
+                                            <option value="Carpenter">Carpenter</option>
+                                            <option value="Painter">Painter</option>
+                                            <option value="Mason">Mason</option>
+                                            <option value="AC Repair">AC Technician</option>
+                                            <option value="Cleaner">Cleaner</option>
+                                            <option value="Gardener">Gardener</option>
+                                            <option value="Welder">Welder</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Technician">Technician</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="experience"><i class="fas fa-chart-line"></i> Experience</label>
+                                        <select id="experience" name="experience">
+                                            <option value="">Select experience</option>
+                                            <option value="0-1 years">0–1 years</option>
+                                            <option value="1-3 years">1–3 years</option>
+                                            <option value="3-5 years">3–5 years</option>
+                                            <option value="5-10 years">5–10 years</option>
+                                            <option value="10+ years">10+ years</option>
+                                        </select>
+                                    </div>
+                                    <div class="fields-inline">
+                                        <div class="field-group">
+                                            <label for="wagePerHour"><i class="fas fa-clock"></i> Rate/hour (₹)</label>
+                                            <input type="number" id="wagePerHour" name="wagePerHour" placeholder="0" step="1" min="0">
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="wagePerDay"><i class="fas fa-calendar-day"></i> Rate/day (₹)</label>
+                                            <input type="number" id="wagePerDay" name="wagePerDay" placeholder="0" step="1" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-submit success">
+                                    Continue to location <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn-back btn-prev" data-prev="1">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── STEP 3: Location ── -->
+            <div class="form-step" id="step3">
+                <div class="step-content">
+                    <div class="step-heading">
+                        <h3>Set your location</h3>
+                        <p>Help us connect you with nearby opportunities</p>
+                    </div>
+
+                    <div class="location-section">
+                        <div class="search-row">
+                            <div class="search-box">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" class="search-input" id="locationSearch"
+                                       placeholder="Search city, area, or landmark…">
+                            </div>
+                            <button type="button" class="btn-locate" id="useCurrentLocation" title="Use my location">
+                                <i class="fas fa-location-crosshairs"></i>
+                            </button>
+                        </div>
+
+                        <div class="map-wrap">
+                            <div id="addressMap"></div>
+                            <div class="map-hint">
+                                <i class="fas fa-info-circle"></i> Click the map or search to set your location
+                            </div>
+                        </div>
+
+                        <div class="location-fields">
+                            <div class="field-group">
+                                <label for="city"><i class="fas fa-city"></i> City</label>
+                                <input type="text" id="city" placeholder="Detected from map" readonly>
+                            </div>
+                            <div class="field-group">
+                                <label for="state"><i class="fas fa-map"></i> State</label>
+                                <input type="text" id="state" placeholder="Detected from map" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn-back btn-prev" data-prev="2">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn-primary-action btn-next" data-next="4" disabled>
+                            Review &amp; Complete <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── STEP 4: Review ── -->
+            <div class="form-step" id="step4">
+                <div class="step-content">
+                    <div class="step-heading">
+                        <h3>Review your details</h3>
+                        <p>Double-check everything before completing registration</p>
+                    </div>
+
+                    <div class="review-grid">
+                        <div class="review-card">
+                            <div class="review-card-title"><i class="fas fa-user"></i> Personal information</div>
+                            <div class="review-rows">
+                                <div class="review-row"><span>Name</span><strong id="reviewName">—</strong></div>
+                                <div class="review-row"><span>Email</span><strong id="reviewEmail">—</strong></div>
+                                <div class="review-row"><span>Phone</span><strong id="reviewPhone">—</strong></div>
+                                <div class="review-row"><span>Age</span><strong id="reviewAge">—</strong></div>
+                                <div class="review-row"><span>Account type</span><strong id="reviewUserType">—</strong></div>
+                            </div>
+                        </div>
+
+                        <div class="review-card" id="professionalReview" style="display:none;">
+                            <div class="review-card-title"><i class="fas fa-briefcase"></i> Professional information</div>
+                            <div class="review-rows">
+                                <div class="review-row"><span>Profession</span><strong id="reviewProfession">—</strong></div>
+                                <div class="review-row"><span>Experience</span><strong id="reviewExperience">—</strong></div>
+                                <div class="review-row"><span>Rate/hour</span><strong>₹<span id="reviewWageHour">—</span></strong></div>
+                                <div class="review-row"><span>Rate/day</span><strong>₹<span id="reviewWageDay">—</span></strong></div>
+                            </div>
+                        </div>
+
+                        <div class="review-card">
+                            <div class="review-card-title"><i class="fas fa-map-marker-alt"></i> Location</div>
+                            <div class="review-rows">
+                                <div class="review-row"><span>City</span><strong id="reviewCity">—</strong></div>
+                                <div class="review-row"><span>State</span><strong id="reviewState">—</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden final form -->
+                    <form id="finalRegisterForm" action="/register" method="POST" style="display:none;">
+                        <input type="hidden" id="finalUserType" name="userType">
+                        <input type="hidden" id="finalName" name="name">
+                        <input type="hidden" id="finalEmail" name="email">
+                        <input type="hidden" id="finalPassword" name="password">
+                        <input type="hidden" id="finalPhone" name="phone">
+                        <input type="hidden" id="finalAge" name="age">
+                        <input type="hidden" id="finalProfession" name="profession">
+                        <input type="hidden" id="finalExperience" name="experience">
+                        <input type="hidden" id="finalWagePerHour" name="wagePerHour">
+                        <input type="hidden" id="finalWagePerDay" name="wagePerDay">
+                        <input type="hidden" id="finalCity" name="city">
+                        <input type="hidden" id="finalState" name="state">
+                        <input type="hidden" id="finalLat" name="lat">
+                        <input type="hidden" id="finalLng" name="lng">
+                    </form>
+
+                    <div class="step-actions">
+                        <button class="btn-back btn-prev" data-prev="3">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn-complete final-register-btn">
+                            <i class="fas fa-rocket"></i> Complete registration
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.login-card -->
+    </div><!-- /.login-wrap -->
+
+    <!-- Loading Overlay -->
     <div class="loading-spinner" id="loadingSpinner">
         <div class="spinner-content">
-            <div class="spinner"></div>
-            <p>Setting up your account...</p>
+            <div class="spinner-ring"></div>
+            <p>Setting up your account…</p>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+    <script>
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            btn.querySelector('i').className = isText ? 'fas fa-eye' : 'fas fa-eye-slash';
+        }
+    </script>
     <script src="/js/login.js"></script>
 </body>
 </html>

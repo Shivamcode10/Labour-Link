@@ -11,17 +11,19 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     password: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
-    },
-    age: {
-        type: Number,
-        required: true
-    },
+    type: String,
+    required: function() { return this.authProvider === 'local'; }
+},
+phone: {
+    type: String,
+    required: function() { return this.authProvider === 'local'; }
+},
+age: {
+    type: Number,
+    required: function() { return this.authProvider === 'local'; }
+},
+googleId: { type: String },
+authProvider: { type: String, default: 'local' },
     address: {
         street: String,
         city: String,

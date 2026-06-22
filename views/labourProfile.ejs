@@ -82,7 +82,7 @@
                             
                             <div class="info-group">
                                 <label>Age</label>
-                                <p class="mb-0"><%= labour.age %> years</p>
+                                <p class="mb-0"><%= labour.age ? labour.age + ' years' : 'Not provided' %></p>
                             </div>
                             
                             <div class="info-group">
